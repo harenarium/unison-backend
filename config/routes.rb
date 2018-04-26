@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get '/login', to: 'logins#create'
+      get '/access', to: 'users#create'
 
     end
   end

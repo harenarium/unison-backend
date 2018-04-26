@@ -4,10 +4,13 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.integer :connector
       t.integer :conenctee
       t.string :username
+      t.string :display_name
+      t.string :user_spotify_id
       t.string :access_token
       t.string :refresh_token
       t.string :profile_img_url
-      t.datetime :expiration
+      t.integer :expiration
+      t.boolean :autoupdate
 
       t.timestamps
     end

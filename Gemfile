@@ -42,3 +42,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "jwt", "~> 2.1"
 gem "dotenv-rails", "~> 2.2"
+gem 'rest-client'

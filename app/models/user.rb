@@ -11,5 +11,10 @@ class User < ApplicationRecord
 
   has_many :playlists
 
-  validates :username, presence: true, uniqueness: true
+  validates :username, uniqueness: true
+  validates :user_spotify_id, presence: true, uniqueness: true
+
+  def access_token_still_good?
+    (Time.now - self.updated_at) < (self.expiration - 200)
+  end
 end
