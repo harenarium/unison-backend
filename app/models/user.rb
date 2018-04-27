@@ -14,7 +14,7 @@ class User < ApplicationRecord
   validates :username, uniqueness: true
   validates :user_spotify_id, presence: true, uniqueness: true
 
-  def access_token_still_good?
-    (Time.now - self.updated_at) < (self.expiration - 200)
+  def access_token_expired?
+    (Time.now - self.updated_at) > (self.expiration - 200)
   end
 end

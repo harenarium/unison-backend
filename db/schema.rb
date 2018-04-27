@@ -30,11 +30,12 @@ ActiveRecord::Schema.define(version: 20180425130758) do
   end
 
   create_table "playlists", force: :cascade do |t|
+    t.integer "user_id"
     t.string "playlist_name"
     t.string "playlist_spotify_id"
     t.integer "tracks_total"
     t.string "tracks_href"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
