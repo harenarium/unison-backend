@@ -3,8 +3,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get '/login', to: 'logins#create'
-      get '/access', to: 'users#create'
-
+      post '/access', to: 'users#create'
+      post '/update_playlists', to: 'playlists#create'
+      # change to post^ n
+      post '/update_playlist_tracks', to: 'playlisttrackss#create'
+      get '/find_user', to: 'users#show'
     end
   end
 end
