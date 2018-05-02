@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       post '/access', to: 'users#create'
       post '/update_playlists', to: 'playlists#create'
       # change to post^ n
-      post '/update_playlist_tracks', to: 'playlisttrackss#create'
+      post '/update_playlist_tracks', to: 'playlist_tracks#create'
       get '/find_user', to: 'users#show'
       post '/connect_user', to: 'connections#create'
       post '/user_connections', to: 'connections#show'

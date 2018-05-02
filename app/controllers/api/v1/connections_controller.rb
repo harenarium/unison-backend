@@ -9,7 +9,7 @@ class Api::V1::ConnectionsController < ApplicationController
     @connection2 = Connection.find_by(connector_id: @user2.id, connectee_id: @user.id)
     if @connection2
       render json: {status: "complete",
-        results: []
+        connectionjwt: JWT.encode({connection_id: @connection.id}, ENV["JWT_SECRET"], ENV["JWT_ALGORITHM"])
       }
     else
       render json: {status: "pending"}

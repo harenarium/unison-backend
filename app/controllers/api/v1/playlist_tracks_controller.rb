@@ -1,6 +1,5 @@
-class Api::V1::PlaylistsController < ApplicationController
+class Api::V1::PlaylistTracksController < ApplicationController
   def create
-
     # ##### GET/Update PLAYLISTS ##### #
     #get current user
     user_id = JWT.decode(params[:jwt], ENV["JWT_SECRET"], ENV["JWT_ALGORITHM"])[0]["user_id"]
@@ -13,9 +12,10 @@ class Api::V1::PlaylistsController < ApplicationController
     #get user's playlists OR FROM PARAMS???
     @user.playlists.each do |playlist|
       # delete all playlisttracks
-      PlaylistTracks.where (playlist_id: playlist.id).each do |playlistTrack|
+      PlaylistTrack.where(playlist_id: playlist.id).each do |playlistTrack|
         playlistTrack.delete
       end
+
       numberofrequests = playlist.tracks_total/50 + (playlist.tracks_total%50>0 ? 1 : 0)
       numberofrequests.times do
         offset2=0
@@ -40,9 +40,6 @@ class Api::V1::PlaylistsController < ApplicationController
       end
     end
 
-    render json: {jwt: token, currentUser: {
-      display_name: @user.display_name,
-      user_spotify_id: @user.user_spotify_id}
-    }
+    render json: {}
   end
 end
