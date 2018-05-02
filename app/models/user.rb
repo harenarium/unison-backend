@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :connectees, through: :connectee_relations, source: :connectee
 
   has_many :playlists
+  has_many :playlist_tracks, through: :playlists
 
   validates :user_spotify_id, presence: true, uniqueness: true
 

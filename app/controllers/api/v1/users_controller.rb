@@ -41,4 +41,20 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find_by(user_spotify_id: params[:q])
+    if @user
+      @playlists = Playlist.where(user_id: @user.id)
+      render json: {otherUser: {
+        display_name: @user.display_name,
+        user_spotify_id: @user.user_spotify_id},
+        otherUserPlaylists: @playlists
+      }
+    else
+      render json: {otherUser: {
+        user_spotify_id: nil}
+      }
+    end
+  end
+
 end

@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       # change to post^ n
       post '/update_playlist_tracks', to: 'playlisttrackss#create'
       get '/find_user', to: 'users#show'
+      post '/connect_user', to: 'connections#create'
+      post '/user_connections', to: 'connections#show'
+      post '/results', to: 'results#create'
     end
   end
 end
