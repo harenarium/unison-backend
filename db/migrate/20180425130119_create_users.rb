@@ -1,8 +1,6 @@
 class CreateUsers < ActiveRecord::Migration[5.1]
   def change
     create_table :users do |t|
-      t.integer :connector
-      t.integer :conenctee
       t.string :username
       t.string :display_name
       t.string :user_spotify_id
@@ -12,6 +10,9 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :profile_img_url
       t.integer :expiration
       t.boolean :autoupdate
+      t.boolean :include_playlists, default: true
+      t.boolean :include_artists, default: true
+      t.boolean :include_library, default: true
 
       t.timestamps
     end

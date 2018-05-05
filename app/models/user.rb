@@ -12,6 +12,9 @@ class User < ApplicationRecord
   has_many :playlists
   has_many :playlist_tracks, through: :playlists
 
+  has_many :user_tracks
+  has_many :tracks, through: :user_tracks
+
   validates :user_spotify_id, presence: true, uniqueness: true
 
   def access_token_expired?

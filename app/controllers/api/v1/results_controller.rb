@@ -13,8 +13,30 @@ class Api::V1::ResultsController < ApplicationController
     user2_playlist_tracks = @user2.playlist_tracks
 
     user_tracks_id = user_playlist_tracks.map{|x| x.track_id}
-    result = user2_playlist_tracks.select{|x| user_tracks_id.include? x.track_id}
+    user2_filtered_playlist_tracks = user2_playlist_tracks.select{|x| user_tracks_id.include? x.track_id}
 
+    user2_filtered_tracks_id = user2_filtered_playlist_tracks.map{|x| x.track_id}
+    uniq_tracks_id = user2_filtered_tracks_id.uniq
+
+    result = uniq_tracks_id.map{|id| Track.find(id)}
+    # byebug
     render json: {result: result}
   end
 end
+
+
+# results then actions
+
+
+# get all active tracks form selected playlists and library
+user.enable_playlists ? user.playlists.where(active: true) : []
+then get tracks form each playlist
+user.enable_library ? user.tracks : []
+
+and dif
+
+user1.enable_artists ? user2slists.where track.artist = artist
+and
+user2.enable_artists ? artists == artists
+or only
+user2.enable_artists ? user2slists.where track.artist = artist
