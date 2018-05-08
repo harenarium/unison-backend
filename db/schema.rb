@@ -78,8 +78,6 @@ ActiveRecord::Schema.define(version: 20180503213101) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "connector"
-    t.integer "conenctee"
     t.string "username"
     t.string "display_name"
     t.string "user_spotify_id"
@@ -89,6 +87,9 @@ ActiveRecord::Schema.define(version: 20180503213101) do
     t.string "profile_img_url"
     t.integer "expiration"
     t.boolean "autoupdate"
+    t.boolean "include_playlists", default: true
+    t.boolean "include_artists", default: true
+    t.boolean "include_library", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -5,8 +5,10 @@ Rails.application.routes.draw do
       get '/login', to: 'logins#create'
       post '/access', to: 'users#create'
       get '/find_user', to: 'users#show'
+      post '/find_user', to: 'users#show'
 
       post '/update_playlists', to: 'playlists#create'
+      post '/refresh_playlists', to: 'playlists#show'
       post '/update_playlist_tracks', to: 'playlist_tracks#create'
       post '/update_user_artists', to: 'user_artists#create'
       post '/update_user_tracks', to: 'user_tracks#create'

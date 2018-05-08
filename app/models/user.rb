@@ -15,9 +15,33 @@ class User < ApplicationRecord
   has_many :user_tracks
   has_many :tracks, through: :user_tracks
 
+  has_many :user_artists
+  has_many :artists, through: :user_artists
+
+
   validates :user_spotify_id, presence: true, uniqueness: true
 
   def access_token_expired?
     (Time.now - self.updated_at) > (self.expiration - 200)
   end
+
+  def connected_users
+    self.connectees.select{|connectee| self.connectors.include? connectee}
+  end
+
+  def pending_users
+    self.connectees.reject{|connectee| self.connected_users.include? connectee}
+  end
+
+  def requested_users
+    self.connectors.reject{|connector| self.connected_users.include? connector}
+  end
+
+  def included_tracks
+  end
+
+  def included_artist
+  end
+
+
 end

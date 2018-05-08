@@ -33,28 +33,49 @@ class Api::V1::UsersController < ApplicationController
       @user.update(access_token:auth_params["access_token"], token_type:auth_params["token_type"], refresh_token: auth_params["refresh_token"], expiration: auth_params["expires_in"])
       # redirect_to "http://localhost:3001/success"
       token = JWT.encode({user_id: @user.id}, ENV["JWT_SECRET"], ENV["JWT_ALGORITHM"])
+
       render json: {jwt: token, currentUser: {
         display_name: @user.display_name,
-        user_spotify_id: @user.user_spotify_id}
+        user_spotify_id: @user.user_spotify_id,
+        profile_img_url: @user.profile_img_url}
       }
+
       # auto start get library
+      if @user.autoupdate || Time.now - @user.created_at < 100
+        SpotifyAdapter.update_playlists(@user)
+        SpotifyAdapter.update_user_tracks(@user)
+        SpotifyAdapter.update_user_artists(@user)
+        SpotifyAdapter.update_playlist_tracks(@user)
+      end
+
     end
   end
 
   def show
-    @user = User.find_by(user_spotify_id: params[:q])
-    if @user
-      @playlists = Playlist.where(user_id: @user.id)
-      render json: {otherUser: {
-        display_name: @user.display_name,
-        user_spotify_id: @user.user_spotify_id},
-        otherUserPlaylists: @playlists
-      }
+    if params[:q]
+      @user = User.find_by(user_spotify_id: params[:q])
+      if @user
+        @playlists = Playlist.where(user_id: @user.id)
+        render json: {otherUser: {
+          display_name: @user.display_name,
+          user_spotify_id: @user.user_spotify_id,
+          profile_img_url: @user.profile_img_url}
+        }
+      else
+        render json: {otherUser: {
+          user_spotify_id: nil}
+        }
+      end
+
     else
-      render json: {otherUser: {
-        user_spotify_id: nil}
+      @user = BackendAdapter.get_current_user(params[:jwt])
+      render json: {currentUser: {
+        display_name: @user.display_name,
+        user_spotify_id: @user.user_spotify_id,
+        profile_img_url: @user.profile_img_url}
       }
     end
+
   end
 
 end
