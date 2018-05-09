@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post '/user_connections', to: 'connections#show'
       post '/results', to: 'results#create'
       post '/settings', to: 'settings#create'
+      post '/get_settings', to: 'settings#show'
     end
   end
 end

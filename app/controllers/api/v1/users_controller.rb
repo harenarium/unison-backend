@@ -42,10 +42,9 @@ class Api::V1::UsersController < ApplicationController
 
       # auto start get library
       if @user.autoupdate || Time.now - @user.created_at < 100
-        SpotifyAdapter.update_playlists(@user)
+        SpotifyAdapter.update_playlists_and_playlist_tracks(@user)
         SpotifyAdapter.update_user_tracks(@user)
         SpotifyAdapter.update_user_artists(@user)
-        SpotifyAdapter.update_playlist_tracks(@user)
       end
 
     end

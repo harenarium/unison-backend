@@ -1,26 +1,37 @@
 class Api::V1::ResultsController < ApplicationController
   def create
     # pass in and check connection?
-    # byebug
-    connection_id = JWT.decode(params[:connection], ENV["JWT_SECRET"], ENV["JWT_ALGORITHM"])[0]["connection_id"]
-    @connection = Connection.find(connection_id)
-    # get user from connection
-    # user_id = JWT.decode(params[:jwt], ENV["JWT_SECRET"], ENV["JWT_ALGORITHM"])[0]["user_id"]
-    @user = User.find(@connection.connector_id)
-    @user2 = User.find(@connection.connectee_id)
+    @user = BackendAdapter.get_current_user(params[:jwt])
+    @user2 = User.find_by(user_spotify_id: params[:otherUserId])
 
-    user_playlist_tracks = @user.playlist_tracks
-    user2_playlist_tracks = @user2.playlist_tracks
+    user_tracks = ((@user.include_playlists ? @user.playlist_tracks.map{|x| x.track} : []) +
+    (@user.include_some_playlists ? @user.playlists.where(active: true).reduce([]){|tracks,playlist| tracks + playlist.tracks} : []) +
+    (@user.include_library ? @user.tracks : [])).uniq
 
-    user_tracks_id = user_playlist_tracks.map{|x| x.track_id}
-    user2_filtered_playlist_tracks = user2_playlist_tracks.select{|x| user_tracks_id.include? x.track_id}
+    user2_tracks = ((@user2.include_playlists ? @user2.playlist_tracks.map{|x| x.track} : []) +
+    (@user2.include_some_playlists ? @user2.playlists.where(active: true).reduce([]){|tracks,playlist| tracks + playlist.tracks} : []) +
+    (@user2.include_library ? @user2.tracks : [])).uniq
 
-    user2_filtered_tracks_id = user2_filtered_playlist_tracks.map{|x| x.track_id}
-    uniq_tracks_id = user2_filtered_tracks_id.uniq
+    user_tracks_ids = user_tracks.map{|x| x.id}
+    tracks_intersection = user2_tracks.select{|x| user_tracks_ids.include? x.id}
 
-    result = uniq_tracks_id.map{|id| Track.find(id)}
-    # byebug
-    render json: {result: result}
+    artists_intersection = []
+    user_artists_ids = @user.artists.map{|x| x.id}
+    user2_artists_ids = @user2.artists.map{|x| x.id}
+
+    if @user.include_artists && @user.include_artists
+      # artists_intersection = (user_artists_ids && user2_artists_ids).map or something
+      artists_intersection = @user2.artists.select{|x| user_artists_ids.include? x.id}
+    end
+
+    artist_track_intersections = []
+    if @user.include_artists
+      artist_track_intersections += user2_tracks.select{|track| (track.artists.map{|x| x.id} & user_artists_ids).present? }
+    end
+    if @user2.include_artists
+      artist_track_intersections += user_tracks.select{|track| (track.artists.map{|x| x.id} & user2_artists_ids).present? }
+    end
+    render json: {resulttracks: tracks_intersection, resultmoretracks: artist_track_intersections, resultartists: artists_intersection}
   end
 end
 
@@ -29,14 +40,14 @@ end
 
 
 # get all active tracks form selected playlists and library
-user.enable_playlists ? user.playlists.where(active: true) : []
-then get tracks form each playlist
-user.enable_library ? user.tracks : []
-
-and dif
-
-user1.enable_artists ? user2slists.where track.artist = artist
-and
-user2.enable_artists ? artists == artists
-or only
-user2.enable_artists ? user2slists.where track.artist = artist
+# user.include_playlists ? user.playlists.where(active: true) : []
+# then get tracks form each playlist
+# user.include_library ? user.tracks : []
+#
+# and dif
+#
+# user1.include_artists ? user2slists.where track.artist = artist
+# and
+# user2.include_artists ? artists == artists
+# or only
+# user2.include_artists ? user2slists.where track.artist = artist

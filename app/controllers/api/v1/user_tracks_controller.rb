@@ -1,4 +1,4 @@
-class Api::V1::PlaylistTracksController < ApplicationController
+class Api::V1::UserTracksController < ApplicationController
   def create
 
     @user = BackendAdapter.get_current_user(params[:jwt])

@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 20180503213101) do
   enable_extension "plpgsql"
 
   create_table "artist_tracks", force: :cascade do |t|
-    t.string "artist_id"
-    t.string "track_id"
+    t.integer "artist_id"
+    t.integer "track_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -64,15 +64,15 @@ ActiveRecord::Schema.define(version: 20180503213101) do
   end
 
   create_table "user_artists", force: :cascade do |t|
-    t.string "user_id"
-    t.string "artist_id"
+    t.integer "user_id"
+    t.integer "artist_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "user_tracks", force: :cascade do |t|
-    t.string "user_id"
-    t.string "track_id"
+    t.integer "user_id"
+    t.integer "track_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 20180503213101) do
     t.boolean "include_playlists", default: true
     t.boolean "include_artists", default: true
     t.boolean "include_library", default: true
+    t.boolean "include_some_playlists", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

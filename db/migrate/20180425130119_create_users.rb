@@ -9,10 +9,12 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :token_type
       t.string :profile_img_url
       t.integer :expiration
-      t.boolean :autoupdate
+      t.boolean :autoupdate, dafault: false
       t.boolean :include_playlists, default: true
       t.boolean :include_artists, default: true
       t.boolean :include_library, default: true
+      t.boolean :include_some_playlists, default: false
+
 
       t.timestamps
     end
