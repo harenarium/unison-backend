@@ -63,7 +63,7 @@ class SpotifyAdapter
             tracks_params = JSON.parse(playlist_response.body)
 
             tracks_params["items"].each do |track|
-              @track = Track.find_or_create_by(track_spotify_id: track["track"]["id"], track_name: track["track"]["name"])
+              @track = Track.find_or_create_by(track_spotify_id: track["track"]["id"], track_name: track["track"]["name"], artist_name_string: track["track"]["album"]["name"], album_name: track["track"]["artists"].map{|artist| artist["name"]}.join(", "))
               # playlist.id gives different id for some reason!!!! ????
               # @playlist = Playlist.find_by(playlist_spotify_id: playlist.playlist_spotify_id)
               @pt = PlaylistTrack.find_or_create_by(playlist_id: @playlist.id, track_id: @track.id)
@@ -169,7 +169,7 @@ class SpotifyAdapter
       end
       track_params = JSON.parse(track_response.body)
       track_params["items"].each do |track|
-        @track = Track.find_or_create_by(track_spotify_id: track["track"]["id"], track_name: track["track"]["name"])
+        @track = Track.find_or_create_by(track_spotify_id: track["track"]["id"], track_name: track["track"]["name"], album_name: track["track"]["album"]["name"], artist_name_string: track["track"]["artists"].map{|artist| artist["name"]}.join(", "))
         @ut = UserTrack.find_or_create_by(track_id: @track.id, user_id: user.id)
         track["track"]["artists"].each do |artist|
           @artist = Artist.find_or_create_by(artist_name: artist["name"], artist_spotify_id: artist["id"])

@@ -57,8 +57,8 @@ ActiveRecord::Schema.define(version: 20180503213101) do
   create_table "tracks", force: :cascade do |t|
     t.string "track_name"
     t.string "track_spotify_id"
-    t.string "artist_name"
-    t.string "artist_spotify_id"
+    t.string "artist_name_string"
+    t.string "album_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

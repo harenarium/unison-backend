@@ -25,6 +25,7 @@ class Api::V1::UsersController < ApplicationController
       rescue RestClient::ExceptionWithResponse => err
         puts err.response # does this work???
       end
+      
       user_params = JSON.parse(user_response.body)
       @user = User.find_or_create_by(user_spotify_id: user_params["id"])
       # Add or update user's information here
