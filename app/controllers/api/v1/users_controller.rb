@@ -1,6 +1,5 @@
 class Api::V1::UsersController < ApplicationController
   def create
-    buybug
     if params[:error]
       puts "LOGIN ERROR", params
       redirect_to "http://localhost:3001/login/failure"
